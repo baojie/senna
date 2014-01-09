@@ -141,9 +141,11 @@ void* SENNA_malloc(size_t size, size_t nitems)
 
 void* SENNA_realloc(void *ptr, size_t size, size_t nitems)
 {
-  ptr = realloc(ptr, size*nitems);
-  if(!ptr)
-    SENNA_error("memory allocation error [%ldGB] -- buy new RAM", size << 30);
+  if(size*nitems > 0){
+    ptr = realloc(ptr, size*nitems);
+    if(!ptr)
+      SENNA_error("memory allocation error [%ldGB] -- buy new RAM", size << 30);
+  }
   return ptr;
 }
 
