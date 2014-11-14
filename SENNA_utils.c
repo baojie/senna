@@ -130,9 +130,19 @@ void SENNA_fclose(FILE *stream)
   fclose(stream);
 }
 
+
 void* SENNA_malloc(size_t size, size_t nitems)
 {
-  void *res = malloc(size*nitems);
+  void *res = NULL;
+
+  if(size*nitems > 0){
+    /*Actually call calloc for zero'd memory*/
+    res = calloc(1, size*nitems);
+  }
+  else{
+    SENNA_error("attempted to malloc 0 bytes -- exiting");
+  }
+
   if(!res)
     SENNA_error("memory allocation error [%ldGB] -- buy new RAM", size << 30);
   return res;
@@ -141,9 +151,16 @@ void* SENNA_malloc(size_t size, size_t nitems)
 
 void* SENNA_realloc(void *ptr, size_t size, size_t nitems)
 {
-  ptr = realloc(ptr, size*nitems);
+  if(size*nitems > 0){
+    ptr = realloc(ptr, size*nitems);
+  }
+  else{
+    SENNA_error("attempted to realloc block to 0 bytes -- exiting");
+  }
+
   if(!ptr)
     SENNA_error("memory allocation error [%ldGB] -- buy new RAM", size << 30);
+
   return ptr;
 }
 
