@@ -135,7 +135,7 @@ void* SENNA_malloc(size_t size, size_t nitems)
 {
   void *res = NULL;
 
-  if(size*nitems != 0){
+  if(size*nitems > 0){
     /*Actually call calloc for zero'd memory*/
     res = calloc(1, size*nitems);
   }
